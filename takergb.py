@@ -36,7 +36,7 @@ def onclick(event):
 	x=event.xdata
 	y=event.ydata
 	print 'X=%f, y=%f'%(x,y)
-	if(x>2 and x<87 and y>2 and y<87):
+	if(x>2 and x<86 and y>2 and y<86):
 		global image
 		print len(image)
 		rgb = image[int(y)][int(x)]
@@ -45,9 +45,11 @@ def onclick(event):
 		for i in range(len(rgbinit)):
 			if(rgbinit[i]<0):
 				rgbinit[i]=0
-			if(rgbinit[i]>255):
-				rgbinit[i]=255
+			else:
+				if(rgbinit[i]>255):
+					rgbinit[i]=255
 		print rgbinit
+		print 'rgb -> ' + str(rgb)
 
 
 def imagehold(image,rgbv):
@@ -58,16 +60,13 @@ def imagehold(image,rgbv):
 		row=[]
 		for o in range(len(image[0])):
 			pixel=[]
-			for u in range(len(image[0][0])):
-				if (image[i][o][u] > rgbv[2*u]):
-					pixel.append(np.uint8(1))
-				else:
-					if (image[i][o][u] < rgbv[2*u+1]):
-						pixel.append(np.uint8(1))
-					else:
-						pixel.append(np.uint8(254))
+
+			if(image[i][o][0] <= rgbv[0] and image[i][o][0] >= rgbv[1]) and (image[i][o][1] <= rgbv[2] and image[i][o][1] >= rgbv[3]) and (image[i][o][2] <= rgbv[4] and image[i][o][2] >= rgbv[5]):
+				pixel=[1,1,1]
+			else:
+				pixel=[254,254,254]
+
 			row.append(pixel)
-			print pixel
 		newimage.append(row)
 	return newimage
 
@@ -115,8 +114,9 @@ while True :
 	print size
 
 	image_data=[]
-	for x in xrange(1,87):
+	for x in xrange(1,size[0]):
 		data = takeuntil(2)
+		#print len(data)
 		image_data.append([[255-map(data[i]),255-map(data[i+1]),255-map(data[i+2])] for i in range(0, len(data), 3)])
 
 	image=image_data
@@ -162,6 +162,6 @@ while True :
 
 		print rgbinit
 
-	plt.pause(0.1)
+	plt.pause(0.001)
 	plt.show(block=False)
 	#print samp.val,sfreq.val

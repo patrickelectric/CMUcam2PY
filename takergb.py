@@ -6,19 +6,24 @@ import numpy as np
 import matplotlib.pyplot as plt
 from matplotlib.widgets import Slider
 
+# create serial port
 ser = serial.Serial(port='/dev/ttyUSB0',baudrate=115200)
 
+# start the rgbvector
 rgbinit = [125,125,125,125,125,125]
 
+# map values of the camera to RGB
 def map(x,in_min=16,in_max=240,out_min=0,out_max=250):
 	return abs((x - in_min) * (out_max - out_min) / (in_max - in_min) + out_min)
 
+# take serial data
 def take(x):
 	if(x==1):
 		return ord(ser.read())
 	else:
 		return [ord(ser.read()) for i in range(x)]
 
+# read serial until
 def takeuntil(x):
 	a = []
 	char = 0
@@ -31,6 +36,7 @@ def takeuntil(x):
 			return a
 image=[]
 
+# if clicked on image take rgb pixel
 def onclick(event):
     # print 'button=%d, x=%d, y=%d, xdata=%f, ydata=%f'%(event.button, event.x, event.y, event.xdata, event.ydata)
 	x=event.xdata
@@ -52,6 +58,7 @@ def onclick(event):
 		print 'rgb -> ' + str(rgb)
 
 
+# make stupid threshold
 def imagehold(image,rgbv):
 	xsize = len(image)
 	ysize = len(image[0])
@@ -70,9 +77,6 @@ def imagehold(image,rgbv):
 		newimage.append(row)
 	return newimage
 
-
-
-	image
 
 slicechange=True
 
@@ -97,11 +101,15 @@ def sliceupdateBmin(val):
 fig,sub = plt.subplots(2,2)
 fig.canvas.mpl_connect('button_press_event', onclick)
 
+# restart camera
 ser.write("RS \r")
-time.sleep(0.5);
+time.sleep(0.7);
+# gibe me all you have all the time
 ser.write("FS 1 \r")
-time.sleep(0.1)
+time.sleep(0.2)
+# send frame
 ser.write("SF \r")
+time.sleep(0.2)
 
 ff=0
 while True :
@@ -159,7 +167,9 @@ while True :
 		GminV.set_val(rgbinit[3])
 		BmaxV.set_val(rgbinit[4])
 		BminV.set_val(rgbinit[5])
-
+		file = open("rgb.txt", "w")
+		file.write(str(rgbinit))
+		file.close()
 		print rgbinit
 
 	plt.pause(0.001)

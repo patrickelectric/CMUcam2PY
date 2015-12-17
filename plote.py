@@ -37,9 +37,11 @@ plt.autoscale(enable=True)
 while(True):
     a = takeuntil('\n')
     b = ''.join(a)
-    c[:-1]=c[1:]
     del c[0]
-    c.append(float(b))
+    try:
+        c.append(float(b))
+    except ValueError:
+        c.append(c[-1])
 
     print c
     print d

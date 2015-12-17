@@ -101,6 +101,8 @@ def sliceupdateBmin(val):
 fig,sub = plt.subplots(2,2)
 fig.canvas.mpl_connect('button_press_event', onclick)
 
+ser.flushInput()
+ser.flushOutput()
 # restart camera
 ser.write("RS \r")
 time.sleep(0.7);
@@ -122,10 +124,12 @@ while True :
 	print size
 
 	image_data=[]
-	for x in xrange(1,size[0]):
+	for x in xrange(0,141):
 		data = takeuntil(2)
-		#print len(data)
-		image_data.append([[255-map(data[i]),255-map(data[i+1]),255-map(data[i+2])] for i in range(0, len(data), 3)])
+		print len(data)
+		print data
+		if(len(data)==size[0]*3):
+			image_data.append([[255-map(data[i]),255-map(data[i+1]),255-map(data[i+2])] for i in range(0, len(data), 3)])
 
 	image=image_data
 	#image=np.array(image)

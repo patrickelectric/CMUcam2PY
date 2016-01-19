@@ -8,6 +8,6 @@ Code to realize the reading of CMUcam2 for proVANT project.
   - track
     -  Program to draw an ascii image of the tracking obj.
   -  sendusb
-        -  CPP example program for CMUcam2PY.
+	-  CPP example program for CMUcam2PY.
   - CMUcam2_manual
     -  CMUcam2 manual.

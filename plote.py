@@ -7,12 +7,14 @@ import matplotlib.pyplot as plt
 
 ser = serial.Serial(port='/dev/ttyUSB0',baudrate=57600)
 
+#take serial data
 def take(x):
     if(x==1):
         return ser.read()
     else:
         return [ser.read() for i in range(x)]
 
+#take serial data until
 def takeuntil(x):
     a = []
     char = 0
@@ -25,6 +27,7 @@ def takeuntil(x):
 
 c=[0]*300
 d=np.arange(300)
+#cler the first line
 a = takeuntil('\n')
 
 fig = plt.figure()
@@ -34,6 +37,7 @@ fig.canvas.draw()
 plt.show(block=False)
 plt.autoscale(enable=True)
 
+#plot data
 while(True):
     a = takeuntil('\n')
     b = ''.join(a)
